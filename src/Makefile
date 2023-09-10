@@ -1,7 +1,7 @@
 GCC=gcc
 CCFLAGS=-O3
 LDFLAGS=-lm -O3
-MPICC=mpicc
+MPICC=mpicxx
 
 
 debug: tsp-mpi
