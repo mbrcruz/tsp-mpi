@@ -445,11 +445,11 @@ int main(int argc, char *argv[]) {
     // Select the fit individuals to populate the next generation
     selection(pops, new_pops, pop_size, coords, n_cities);
 
-    // Uncomment for periodic updates
-    // if ((i % 100) == 0) {
-    //   printf("Process %d generation %zu\t", id, i + 1);
-    //   FitnessStatus(pops, coords, pop_size, n_cities);
-    // }
+    //Uncomment for periodic updates
+    if ((i % 1000) == 0) {
+      printf("Process %d generation %zu\t", id, i + 1);
+      FitnessStatus(pops, coords, pop_size, n_cities);
+    }
   }
   size_t my_best_path[1];
   my_best_path[0] = 0;
