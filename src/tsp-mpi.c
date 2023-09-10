@@ -448,7 +448,7 @@ int main(int argc, char *argv[]) {
     //Uncomment for periodic updates
     if ((i % 100) == 0) {
      printf("Process %d generation %zu\t", id, i + 1);
-     FitnessStatus(pops, coords, pop_size, n_cities);
+     //FitnessStatus(pops, coords, pop_size, n_cities);
     }
   }
   size_t my_best_path[1];
