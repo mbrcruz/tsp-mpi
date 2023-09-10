@@ -447,7 +447,7 @@ int main(int argc, char *argv[]) {
 
     //Uncomment for periodic updates
     if ((i % 100) == 0) {
-     printf("Process %d generation %zu\t", id, i + 1);
+     printf("Process %d generation %zu\n", id, i + 1);
      //FitnessStatus(pops, coords, pop_size, n_cities);
     }
   }
