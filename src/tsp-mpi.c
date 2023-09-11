@@ -468,19 +468,15 @@ int main(int argc, char *argv[]) {
     }
     // Select the fit individuals to populate the next generation
     selection(pops, new_pops, pop_size, coords, n_cities);
-
+    //Uncomment for periodic updates
+    if ((i % 1000) == 0) {
+      printf("Process %d generation %zu\n", id, i + 1);
+      //FitnessStatus(pops, coords, pop_size, n_cities);  
+    }
 
      #ifdef DEBUG    
       end_time= MPI_Wtime();
-      printf("Process %d in iteration %i took %.2f in seconds\n", id, i, end_time - start_time);
-     else 
-      //Uncomment for periodic updates
-      if ((i % 1000) == 0) {
-       printf("Process %d generation %zu\n", id, i + 1);
-       //FitnessStatus(pops, coords, pop_size, n_cities);     
-       end_time= MPI_Wtime();
-       printf("Process %d in iteration %i took %.2f in seconds\n", id, i, end_time - start_time);    
-      }
+      printf("Process %d in iteration %i took %.2f in seconds\n", id, i, end_time - start_time); 
      #endif
   }
   
