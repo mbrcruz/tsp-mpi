@@ -389,7 +389,14 @@ int main(int argc, char *argv[]) {
     double elapse_time = end_time - start_time;
     printf("Total Sequencial: %.2f in seconds\n", elapse_time);
   }
-  for (size_t i = 0; i < n_generations; ++i) {
+
+
+  //divide tasks
+  int chunk_size = n_generations / ntasks;
+  size_t offset = id * chunk_size;
+  n_generations= offset + chunk_size;
+
+  for (size_t i = offset; i < n_generations; ++i) {
 
     if ( id == 0 && (i % 1000) == 0 ){
       start_time= MPI_Wtime();
