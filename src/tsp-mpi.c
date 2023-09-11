@@ -398,7 +398,9 @@ int main(int argc, char *argv[]) {
   printf("Process %d will resolv from %d to %d.\n", id, offset, n_generations);
 
   for (size_t i = offset; i < n_generations; ++i) {
-
+    #ifdef DEBUG
+      start_time= MPI_Wtime();
+    #endif
     if ((i % 1000) == 0 ){
       start_time= MPI_Wtime();
     }
@@ -466,14 +468,19 @@ int main(int argc, char *argv[]) {
     selection(pops, new_pops, pop_size, coords, n_cities);
 
     //Uncomment for periodic updates
-    if ((i % 1000) == 0) {
-     printf("Process %d generation %zu\n", id, i + 1);
-     //FitnessStatus(pops, coords, pop_size, n_cities);     
-     end_time= MPI_Wtime();
-     printf("Process %d in iteration %i took %.2f in seconds\n", id, i, end_time - start_time);    
-    }
+    // if ((i % 1000) == 0) {
+    //  printf("Process %d generation %zu\n", id, i + 1);
+    //  //FitnessStatus(pops, coords, pop_size, n_cities);     
+    //  end_time= MPI_Wtime();
+    //  printf("Process %d in iteration %i took %.2f in seconds\n", id, i, end_time - start_time);    
+    // }
+     #ifdef DEBUG
+      start_time= MPI_Wtime();
+      end_time= MPI_Wtime();
+      printf("Process %d in iteration %i took %.2f in seconds\n", id, i, end_time - start_time);
+     #endif
   }
-  MPI_Barrier(MPI_COMM_WORLD);
+  
   size_t my_best_path[1];
   my_best_path[0] = 0;
   float best_fit = BestFit(pops, coords, pop_size, n_cities, my_best_path);
