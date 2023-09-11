@@ -357,8 +357,7 @@ int main(int argc, char *argv[]) {
     // Check how many cities there are and read in their coordinates
     n_cities = CountLines(infile);
     coords = (coord *)malloc(n_cities * sizeof(coord));
-    ReadCoords(infile, n_cities, coords);
-    end_time = clock();   
+    ReadCoords(infile, n_cities, coords);     
   }
   // Broadcast the values from the command line and those that were read in.
   MPI_Bcast(&mutation_prob, 1, MPI_FLOAT, 0, MPI_COMM_WORLD);
@@ -385,7 +384,8 @@ int main(int argc, char *argv[]) {
     new_pops[j] = (unsigned short*)malloc(n_cities * sizeof(unsigned short));
   
   if ( id == 0) { 
-     double elapse_time = end_time - start_time;
+    end_time = MPI_Wtime();
+    double elapse_time = end_time - start_time;
     printf("Total Sequencial: %.2f in seconds\n", elapse_time);
   }
   for (size_t i = 0; i < n_generations; ++i) {
