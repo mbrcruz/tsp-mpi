@@ -306,8 +306,9 @@ int main(int argc, char *argv[]) {
   double start_time, end_time;  
   MPI_Status status;
 
-  start_time = MPI_Wtime();
+ 
   rc=MPI_Init(&argc,&argv);
+  start_time = MPI_Wtime();
   if (rc != MPI_SUCCESS) {
     printf("MPI initialization failed\n");
     exit(1);
