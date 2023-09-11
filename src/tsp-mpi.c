@@ -360,6 +360,9 @@ int main(int argc, char *argv[]) {
     n_cities = CountLines(infile);
     coords = (coord *)malloc(n_cities * sizeof(coord));
     ReadCoords(infile, n_cities, coords);
+    end_time = clock();
+    total_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    printf("Total Sequencial: %.2f in seconds\n", total_time);
   }
   // Broadcast the values from the command line and those that were read in.
   MPI_Bcast(&mutation_prob, 1, MPI_FLOAT, 0, MPI_COMM_WORLD);
@@ -493,8 +496,5 @@ int main(int argc, char *argv[]) {
   }
 
   rc = MPI_Finalize();
-  end_time = clock();
-  total_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
-  printf("Total time: %.2f in seconds\n", total_time);
   return 0;
 }
