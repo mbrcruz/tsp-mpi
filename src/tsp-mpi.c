@@ -395,7 +395,7 @@ int main(int argc, char *argv[]) {
   int chunk_size = n_generations / ntasks;
   size_t offset = id * chunk_size;
   n_generations= offset + chunk_size;
-  printf("Process %d will solv generation from %d to %d.\n", id, offset, n_generations);
+  printf("Process %d will resolv from %d to %d.\n", id, offset, n_generations);
 
   for (size_t i = offset; i < n_generations; ++i) {
 
@@ -470,7 +470,7 @@ int main(int argc, char *argv[]) {
      printf("Process %d generation %zu\n", id, i + 1);
      //FitnessStatus(pops, coords, pop_size, n_cities);     
      end_time= MPI_Wtime();
-     printf("Process %d in Generation %i took %.2f in seconds\n", id, i, end_time - start_time);    
+     printf("Process %d in iteration %i took %.2f in seconds\n", id, i, end_time - start_time);    
     }
   }
   MPI_Barrier(MPI_COMM_WORLD);
