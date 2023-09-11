@@ -472,6 +472,7 @@ int main(int argc, char *argv[]) {
      printf("Process %d in Generation %i took %.2f in seconds\n", id, i, end_time - start_time);    
     }
   }
+  MPI_Barrier(MPI_COMM_WORLD);
   size_t my_best_path[1];
   my_best_path[0] = 0;
   float best_fit = BestFit(pops, coords, pop_size, n_cities, my_best_path);
