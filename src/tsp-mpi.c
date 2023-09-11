@@ -395,7 +395,9 @@ int main(int argc, char *argv[]) {
   int chunk_size = n_generations / ntasks;
   size_t offset = id * chunk_size;
   n_generations= offset + chunk_size;
+  #ifdef DEBUG
   printf("Process %d will resolv from %d to %d.\n", id, offset, n_generations);
+  #endif
 
   for (size_t i = offset; i < n_generations; ++i) {
     #ifdef DEBUG
@@ -474,8 +476,7 @@ int main(int argc, char *argv[]) {
     //  end_time= MPI_Wtime();
     //  printf("Process %d in iteration %i took %.2f in seconds\n", id, i, end_time - start_time);    
     // }
-     #ifdef DEBUG
-      start_time= MPI_Wtime();
+     #ifdef DEBUG    
       end_time= MPI_Wtime();
       printf("Process %d in iteration %i took %.2f in seconds\n", id, i, end_time - start_time);
      #endif
