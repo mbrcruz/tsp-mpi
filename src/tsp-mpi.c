@@ -398,7 +398,7 @@ int main(int argc, char *argv[]) {
 
   for (size_t i = offset; i < n_generations; ++i) {
 
-    if ( id == 0 && (i % 1000) == 0 ){
+    if ((i % 1000) == 0 ){
       start_time= MPI_Wtime();
     }
     // Check pops want to emigrate
@@ -467,11 +467,9 @@ int main(int argc, char *argv[]) {
     //Uncomment for periodic updates
     if ((i % 1000) == 0) {
      printf("Process %d generation %zu\n", id, i + 1);
-     //FitnessStatus(pops, coords, pop_size, n_cities);
-     if ( id == 0){
-      end_time= MPI_Wtime();
-      printf("Generation %i took %.2f in seconds\n", i, end_time - start_time);
-     }
+     //FitnessStatus(pops, coords, pop_size, n_cities);     
+     end_time= MPI_Wtime();
+     printf("Process %d in Generation %i took %.2f in seconds\n", id, i, end_time - start_time);    
     }
   }
   size_t my_best_path[1];
