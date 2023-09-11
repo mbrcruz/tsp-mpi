@@ -303,7 +303,11 @@ void check_input(float mutation_prob, size_t pop_size, float migration_prob, siz
 
 int main(int argc, char *argv[]) {
   int id,ntasks,rc;
+  clock_t start_time, end_time;
+  double total_time;
   MPI_Status status;
+
+  start_time = clock();
 
   rc=MPI_Init(&argc,&argv);
   if (rc != MPI_SUCCESS) {
@@ -489,5 +493,8 @@ int main(int argc, char *argv[]) {
   }
 
   rc = MPI_Finalize();
+  end_time = clock();
+  total_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+  printf("Total time: %.2f in seconds\n", total_time);
   return 0;
 }
