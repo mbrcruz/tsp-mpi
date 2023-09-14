@@ -135,8 +135,10 @@ void ReadCoords(char* filename, size_t n_cities, coord* coords) {
   FILE *fp;
   fp = fopen (filename, "r");
   int index = 0;
-  while(fscanf(fp, "%f %f", &coords[index].x, &coords[index].y) == 2)
-    index++;
+  while(fscanf(fp, "%f %f", &coords[index].x, &coords[index].y) == 2){
+    printf("x=%f,y=%f",coords[index].x,coords[index].y);
+    index++;  }
+    
   fclose(fp);
 }
 
