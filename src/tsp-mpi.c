@@ -401,7 +401,7 @@ int main(int argc, char *argv[]) {
   printf("Process %d will resolv from %d to %d.\n", id, offset, n_generations);
   #endif
 
-  for (size_t i = offset; i < n_generations; ++i) {
+  for (size_t i = 0; i < n_generations; ++i) {
     #ifdef DEBUG
       start_time= MPI_Wtime();
     #endif
