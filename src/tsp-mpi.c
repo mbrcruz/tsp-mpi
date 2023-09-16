@@ -394,9 +394,9 @@ int main(int argc, char *argv[]) {
 
 
   // //divide tasks
-  int chunk_size = n_generations / ntasks;
-  size_t offset = id * chunk_size;
-  n_generations= offset + chunk_size;
+  // int chunk_size = n_generations / ntasks;
+  // size_t offset = id * chunk_size;
+  // n_generations= offset + chunk_size;
   #ifdef DEBUG
   printf("Process %d will resolv from %d to %d.\n", id, offset, n_generations);
   #endif
