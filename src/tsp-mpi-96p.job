@@ -1,0 +1,15 @@
+#!/bin/bash
+#PBS -l select=4:ncpus=48:mpiprocs=24
+#PBS -l walltime=01:00:00
+#PBS -j oe
+#PBS -V
+#PBS -N tsp-mpi-96p
+
+# load modules
+module load intel/2019.4
+# change directory
+cd ${PBS_O_WORKDIR}
+# run
+CMD=" mpirun --bind-to core   /home/users/mbrcruz23/tsp-mpi/src/tsp-mpi  /home/users/mbrcruz23/tsp-mpi/run/input.dat 0.75 96000 10000 0.01 100"
+echo $CMD
+time $CMD

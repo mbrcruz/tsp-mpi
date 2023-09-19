@@ -1,0 +1,13 @@
+#!/bin/bash
+#PBS -l select=2:ncpus=4:mpiprocs=2
+#PBS -l walltime=01:00:00
+#PBS -j oe
+#PBS -V
+#PBS -N mpi-intel
+
+# load modules
+module load intel/2019.4
+# change directory
+cd ${PBS_O_WORKDIR}
+# run
+mpirun /home/users/mbrcruz23/tsp-mpi/src/tsp-mpi  /home/users/mbrcruz23/tsp-mpi/run/input.dat 0.75 1000 1000 0.00 100 

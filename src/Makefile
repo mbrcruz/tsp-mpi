@@ -1,4 +1,4 @@
-MPICC=mpicc
+MPICC=mpicxx
 #CCFLAGS=-O3 -DDEBUG
 CCFLAGS=-O3
 LDFLAGS=-lm -O3
