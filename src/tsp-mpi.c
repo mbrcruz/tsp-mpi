@@ -501,7 +501,7 @@ int main(int argc, char *argv[]) {
 
   if (id == best_task_id) {
     printf("Fitness of the best route found is %f.\n", best_fit);
-    printf("The best route found is ");
+    printf("The best route found is \n");
     for (size_t i = 0; i < n_cities; ++i) {
       printf("%d", pops[my_best_path[0]][i]);
       if (i < n_cities - 1)
