@@ -304,7 +304,7 @@ void check_input(float mutation_prob, size_t pop_size, float migration_prob, siz
 int main(int argc, char *argv[]) {
   int id,ntasks,rc;
   MPI_Status status;
-  double start_time, end_time, elapsed_time;
+  double start_time, end_time, elapsed_time=0;
   rc=MPI_Init(&argc,&argv);
   start_time=MPI_Wtime();  
   if (rc != MPI_SUCCESS) {
