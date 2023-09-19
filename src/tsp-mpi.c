@@ -99,7 +99,7 @@ void breed(unsigned short* a, unsigned short* b, coord* coords, size_t n_cities,
     if (IsInPath(child, next_city, i)) {
       // If the city has been visited, then find the first city in
       // ascending order that has not been visited
-      bool *have_visited = (bool *)malloc(n_cities * sizeof(bool));
+      bool *have_visited = malloc(n_cities * sizeof(bool));
       for (size_t j = 0; j < n_cities; ++j) {
 	have_visited[j] = false;
       }
@@ -135,10 +135,8 @@ void ReadCoords(char* filename, size_t n_cities, coord* coords) {
   FILE *fp;
   fp = fopen (filename, "r");
   int index = 0;
-  while(fscanf(fp, "%f %f", &coords[index].x, &coords[index].y) == 2){
-    printf("x=%f,y=%f\n",coords[index].x,coords[index].y);
-    index++;  
-  }    
+  while(fscanf(fp, "%f %f", &coords[index].x, &coords[index].y) == 2)
+    index++;
   fclose(fp);
 }
 
@@ -192,12 +190,12 @@ int cmp_ptr(const void *a, const void *b) {
 
 size_t * order_float(const float *a, size_t n) {
   // Find the (descending) order in an array of floats using qsorts and return the indices rather than the ordered values.
-    const float **pointers = ( const float **)malloc(n * sizeof(const float *));
+    const float **pointers = malloc(n * sizeof(const float *));
     for (size_t i = 0; i < n; i++)
       pointers[i] = a + i;
 
     qsort(pointers, n, sizeof(const float *), cmp_ptr);
-    size_t *indices = (size_t *)malloc(n * sizeof(size_t));
+    size_t *indices = malloc(n * sizeof(size_t));
     for (size_t i = 0; i < n; i++)
       indices[i] = pointers[i] - a;
 
@@ -209,7 +207,7 @@ void selection(unsigned short* old_pops[], unsigned short* new_pops[], unsigned 
   // Select the most fit individuals from both the old and new pops to survive to the next generation.
 
   // First calculate fitness for both populationms
-  float *fits = (float *)malloc(2 * pop_size * sizeof(float));
+  float *fits = malloc(2 * pop_size * sizeof(float));
   for (size_t i = 0; i < pop_size; ++i) {
     fits[2*i] = pathlen(coords, old_pops[i], n_cities);
     fits[2*i + 1] = pathlen(coords, new_pops[i], n_cities);
@@ -239,7 +237,7 @@ void immigration(unsigned short* pops[], size_t migration_size, size_t n_cities,
   // Integrate the emigrants into pops by wiping out the 100 most unfit individuals.
 
   // Calculate fitness for the population
-  float *fits = (float *)malloc(pop_size * sizeof(float));
+  float *fits = malloc(pop_size * sizeof(float));
   for (size_t i = 0; i < pop_size; ++i) {
     fits[i] = pathlen(coords, pops[i], n_cities);
   }
@@ -273,7 +271,7 @@ void w_select_emigrants(unsigned short *pops[], unsigned short pop_size, size_t 
   // Select pops for emigration, weighted by their inverse-fitness.
 
   // Calculate fitness
-  float *fits = (float *)malloc(pop_size * sizeof(float));
+  float *fits = malloc(pop_size * sizeof(float));
   for (size_t i = 0; i < pop_size; ++i) {
     fits[i] = pathlen(coords, pops[i], n_cities);
   }
@@ -305,12 +303,10 @@ void check_input(float mutation_prob, size_t pop_size, float migration_prob, siz
 
 int main(int argc, char *argv[]) {
   int id,ntasks,rc;
-  double start_time, end_time;  
   MPI_Status status;
-
- 
+  double start_time, end_time, elapsed_time;
   rc=MPI_Init(&argc,&argv);
-  start_time = MPI_Wtime();
+  start_time=MPI_Wtime();  
   if (rc != MPI_SUCCESS) {
     printf("MPI initialization failed\n");
     exit(1);
@@ -359,9 +355,11 @@ int main(int argc, char *argv[]) {
 
     // Check how many cities there are and read in their coordinates
     n_cities = CountLines(infile);
-    coords = (coord *)malloc(n_cities * sizeof(coord));
-    ReadCoords(infile, n_cities, coords);     
+    coords = malloc(n_cities * sizeof(coord));
+    ReadCoords(infile, n_cities, coords);
   }
+  end_time=MPI_Wtime();
+  elapsed_time = ( end_time - start_time) + elapsed_time;
   // Broadcast the values from the command line and those that were read in.
   MPI_Bcast(&mutation_prob, 1, MPI_FLOAT, 0, MPI_COMM_WORLD);
   MPI_Bcast(&n_generations, 1, my_MPI_SIZE_T, 0, MPI_COMM_WORLD);
@@ -369,10 +367,14 @@ int main(int argc, char *argv[]) {
   MPI_Bcast(&migration_prob, 1, MPI_FLOAT, 0, MPI_COMM_WORLD);
   MPI_Bcast(&migration_size, 1, my_MPI_SIZE_T, 0, MPI_COMM_WORLD);
   MPI_Bcast(&n_cities, 1, my_MPI_SIZE_T, 0, MPI_COMM_WORLD);
+  start_time=MPI_Wtime();
   if (id > 0) {
-    coords = (coord *)malloc(n_cities * sizeof(coord));
+    coords = malloc(n_cities * sizeof(coord));
   }
+  end_time=MPI_Wtime();
+  elapsed_time = ( end_time - start_time) + elapsed_time;
   MPI_Bcast(coords, n_cities, mpi_coord_type, 0, MPI_COMM_WORLD);
+  start_time=MPI_Wtime();
 
   // Initialize a population from random paths
   unsigned short *pops[pop_size];
@@ -385,29 +387,8 @@ int main(int argc, char *argv[]) {
   unsigned short *new_pops[pop_size];
   for (size_t j = 0; j < pop_size; ++j)
     new_pops[j] = (unsigned short*)malloc(n_cities * sizeof(unsigned short));
-  
-  if ( id == 01000) { 
-    end_time = MPI_Wtime();
-    double elapse_time = end_time - start_time;
-    printf("Total Sequencial: %.2f in seconds\n", elapse_time);
-  }
-
-
-  // //divide tasks
-  // int chunk_size = n_generations / ntasks;
-  // size_t offset = id * chunk_size;
-  // n_generations= offset + chunk_size;
-  #ifdef DEBUG
-  printf("Process %d will resolv from %d to %d.\n", id, offset, n_generations);
-  #endif
 
   for (size_t i = 0; i < n_generations; ++i) {
-    #ifdef DEBUG
-      start_time= MPI_Wtime();
-    #endif
-    if ((i % 1000) == 0 ){
-      start_time= MPI_Wtime();
-    }
     // Check pops want to emigrate
     if (rand_p() < migration_prob) {
       // Emigrants and immigrants need to be allocated contiguously for MPI
@@ -429,14 +410,20 @@ int main(int argc, char *argv[]) {
       }
       //printf("id=%d , generation=%d , target_id=%d\n", id, i ,target_id);
       MPI_Request req;
+      end_time=MPI_Wtime();
+      elapsed_time = end_time - start_time;
       MPI_Isend(&(emigrants[0][0]), n_cities * migration_size, MPI_UNSIGNED_SHORT, target_id, 42, MPI_COMM_WORLD, &req);
+      start_time=MPI_Wtime();
       free(emigrants);
     }
 
     // Check if some pops want to immigrate
     MPI_Status status;
     int has_immigrants = 0;
+    end_time=MPI_Wtime();
+    elapsed_time = ( end_time - start_time) + elapsed_time;
     MPI_Iprobe(MPI_ANY_SOURCE, 42, MPI_COMM_WORLD, &has_immigrants, &status);
+    start_time=MPI_Wtime();
     if (has_immigrants) {
       //printf("id=%d", id);
       unsigned short *data = (unsigned short *)malloc(migration_size*n_cities*sizeof(unsigned short));
@@ -444,7 +431,10 @@ int main(int argc, char *argv[]) {
       for (size_t i = 0; i < migration_size; ++i)
 	      immigrants[i] = &(data[n_cities*i]);
 
+      end_time=MPI_Wtime();
+      elapsed_time = ( end_time - start_time) + elapsed_time;
       MPI_Recv(&(immigrants[0][0]), n_cities * migration_size, MPI_UNSIGNED_SHORT, status.MPI_SOURCE, status.MPI_TAG, MPI_COMM_WORLD, &status);
+      start_time=MPI_Wtime();
 
       // Replace the 100 most unfit pops with the immigrants
       immigration(pops, migration_size, n_cities, pop_size, coords, immigrants);
@@ -470,18 +460,13 @@ int main(int argc, char *argv[]) {
     }
     // Select the fit individuals to populate the next generation
     selection(pops, new_pops, pop_size, coords, n_cities);
-    //Uncomment for periodic updates
-    if ((i % 1000) == 0) {
-      printf("Process %d generation %zu\n", id, i + 1);
-      //FitnessStatus(pops, coords, pop_size, n_cities);  
-    }
 
-     #ifdef DEBUG    
-      end_time= MPI_Wtime();
-      printf("Process %d in iteration %i took %.2f in seconds\n", id, i, end_time - start_time); 
-     #endif
+    // Uncomment for periodic updates
+     if ((i % 100) == 0) {
+       printf("Process %d generation %zu\t", id, i + 1);
+       FitnessStatus(pops, coords, pop_size, n_cities);
+     }
   }
-  
   size_t my_best_path[1];
   my_best_path[0] = 0;
   float best_fit = BestFit(pops, coords, pop_size, n_cities, my_best_path);
@@ -491,9 +476,12 @@ int main(int argc, char *argv[]) {
   // Process 0 will find the best fitness overall
   float *sub_fits = NULL;
   if (id == 0) {
-    sub_fits = (float *)malloc(sizeof(float) * ntasks);
+    sub_fits = malloc(sizeof(float) * ntasks);
   }
+  end_time=MPI_Wtime();
+  elapsed_time = ( end_time - start_time) + elapsed_time;
   MPI_Gather(&best_fit, 1, MPI_FLOAT, sub_fits, 1, MPI_FLOAT, 0, MPI_COMM_WORLD);
+  start_time=MPI_Wtime();
 
   size_t best_task_id = 0;
   if (id == 0) {
@@ -506,7 +494,10 @@ int main(int argc, char *argv[]) {
     }
     free(sub_fits);
   }
+  end_time=MPI_Wtime();
+  elapsed_time = ( end_time - start_time) + elapsed_time;
   MPI_Bcast(&best_task_id, 1, my_MPI_SIZE_T, 0, MPI_COMM_WORLD);
+  start_time=MPI_Wtime();
 
   if (id == best_task_id) {
     printf("Fitness of the best route found is %f.\n", best_fit);
@@ -519,6 +510,9 @@ int main(int argc, char *argv[]) {
     printf(".\n");
   }
 
+  end_time=MPI_Wtime();
+  elapsed_time = ( end_time - start_time) + elapsed_time;
+  printf("Total time for %d is %f seconds.\n", id,elapsed_time);
   rc = MPI_Finalize();
   return 0;
 }
