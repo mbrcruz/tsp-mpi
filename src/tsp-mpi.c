@@ -355,7 +355,7 @@ int main(int argc, char *argv[]) {
 
     // Check how many cities there are and read in their coordinates
     n_cities = CountLines(infile);
-    coords = malloc(n_cities * sizeof(coord));
+    coords = (coord *)malloc(n_cities * sizeof(coord));
     ReadCoords(infile, n_cities, coords);
   }
   end_time=MPI_Wtime();
@@ -369,7 +369,7 @@ int main(int argc, char *argv[]) {
   MPI_Bcast(&n_cities, 1, my_MPI_SIZE_T, 0, MPI_COMM_WORLD);
   start_time=MPI_Wtime();
   if (id > 0) {
-    coords = malloc(n_cities * sizeof(coord));
+    coords = (coord *)malloc(n_cities * sizeof(coord));
   }
   end_time=MPI_Wtime();
   elapsed_time = ( end_time - start_time) + elapsed_time;
@@ -476,7 +476,7 @@ int main(int argc, char *argv[]) {
   // Process 0 will find the best fitness overall
   float *sub_fits = NULL;
   if (id == 0) {
-    sub_fits = malloc(sizeof(float) * ntasks);
+    sub_fits = (float *)malloc(sizeof(float) * ntasks);
   }
   end_time=MPI_Wtime();
   elapsed_time = ( end_time - start_time) + elapsed_time;
