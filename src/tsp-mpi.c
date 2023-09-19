@@ -411,7 +411,7 @@ int main(int argc, char *argv[]) {
       //printf("id=%d , generation=%d , target_id=%d\n", id, i ,target_id);
       MPI_Request req;
       end_time=MPI_Wtime();
-      elapsed_time = end_time - start_time;
+      elapsed_time = ( end_time - start_time) + elapsed_time;
       MPI_Isend(&(emigrants[0][0]), n_cities * migration_size, MPI_UNSIGNED_SHORT, target_id, 42, MPI_COMM_WORLD, &req);
       start_time=MPI_Wtime();
       free(emigrants);
