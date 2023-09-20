@@ -514,10 +514,10 @@ int main(int argc, char *argv[]) {
 
   end_time=MPI_Wtime();
   elapsed_time = ( end_time - start_time) + elapsed_time;
-  printf("Total time for %d is %f seconds.\n", id,elapsed_time);
+  printf("Total time for processor %d is %f seconds.\n", id,elapsed_time);
   end_time_total=MPI_Wtime();
-  cpu_time_used_total = ((double)(end_time_total - start_time_total));
-  printf("Total time for the program is %f seconds\n", cpu_time_used_total);
+  cpu_time_used_total = ((double)(end_time_total - start_time_total));  
   rc = MPI_Finalize(); 
+  printf("Total time for the program is %f seconds\n", cpu_time_used_total);
   return 0;
 }
