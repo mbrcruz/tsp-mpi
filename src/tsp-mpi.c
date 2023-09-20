@@ -303,11 +303,12 @@ void check_input(float mutation_prob, size_t pop_size, float migration_prob, siz
 
 int main(int argc, char *argv[]) {
   int id,ntasks,rc;
-  clock_t start_time_total,end_time_total;
-  start_time_total=clock();
+  double start_time_total,end_time_total;
+  
   MPI_Status status;
   double start_time, end_time, elapsed_time=0,cpu_time_used_total;
   rc=MPI_Init(&argc,&argv);
+  start_time_total=clock();
   start_time=MPI_Wtime();  
   if (rc != MPI_SUCCESS) {
     printf("MPI initialization failed\n");
@@ -514,9 +515,9 @@ int main(int argc, char *argv[]) {
   end_time=MPI_Wtime();
   elapsed_time = ( end_time - start_time) + elapsed_time;
   printf("Total time for %d is %f seconds.\n", id,elapsed_time);
-  rc = MPI_Finalize();
-  end_time_total=clock();
+  end_time_total=MPI_Wtime();
   cpu_time_used_total = (((double)(end_time_total - start_time_total)) / CLOCKS_PER_SEC);
   printf("Total time for the program is %f seconds\n", cpu_time_used_total);
+  rc = MPI_Finalize(); 
   return 0;
 }
