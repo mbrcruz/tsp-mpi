@@ -409,8 +409,7 @@ int main(int argc, char *argv[]) {
 	      target_id = ntasks - 1;
       } else if (!prev && id == ntasks - 1) {
 	      target_id = 0;
-      }
-      //printf("id=%d , generation=%d , target_id=%d\n", id, i ,target_id);
+      }      
       MPI_Request req;
       end_time=MPI_Wtime();
       elapsed_time = ( end_time - start_time) + elapsed_time;
@@ -456,8 +455,8 @@ int main(int argc, char *argv[]) {
       float mutate_p = rand_p();
       //      if (rand_p() < mutation_prob)
       while (mutate_p < mutation_prob) {
-  	mutate(new_pops[j], n_cities);
-	mutate_p = rand_p();
+  	    mutate(new_pops[j], n_cities);
+	      mutate_p = rand_p();
       }
     }
     // Select the fit individuals to populate the next generation
@@ -465,7 +464,7 @@ int main(int argc, char *argv[]) {
 
     // Uncomment for periodic updates
      if ((i % 1000) == 0) {
-       printf("Process %d generation %zu\t", id, i + 1);
+       printf("Process %d generation %zu\n", id, i + 1);
        //FitnessStatus(pops, coords, pop_size, n_cities);
      }
   }
