@@ -308,7 +308,7 @@ int main(int argc, char *argv[]) {
   MPI_Status status;
   double start_time, end_time, elapsed_time=0,cpu_time_used_total;
   rc=MPI_Init(&argc,&argv);
-  start_time_total=clock();
+  start_time_total=MPI_Wtime();
   start_time=MPI_Wtime();  
   if (rc != MPI_SUCCESS) {
     printf("MPI initialization failed\n");
@@ -516,7 +516,7 @@ int main(int argc, char *argv[]) {
   elapsed_time = ( end_time - start_time) + elapsed_time;
   printf("Total time for %d is %f seconds.\n", id,elapsed_time);
   end_time_total=MPI_Wtime();
-  cpu_time_used_total = (((double)(end_time_total - start_time_total)) / CLOCKS_PER_SEC);
+  cpu_time_used_total = ((double)(end_time_total - start_time_total));
   printf("Total time for the program is %f seconds\n", cpu_time_used_total);
   rc = MPI_Finalize(); 
   return 0;
