@@ -390,7 +390,12 @@ int main(int argc, char *argv[]) {
   for (size_t j = 0; j < pop_size; ++j)
     new_pops[j] = (unsigned short*)malloc(n_cities * sizeof(unsigned short));
 
-  for (size_t i = 0; i < n_generations; ++i) {
+  //chunks
+  size_t chunk = n_generations / ntasks;
+  size_t offset = id * chunk;
+  size_t window = offset + chunk;
+
+  for (size_t i = offset; i < window; ++i) {
     // Check pops want to emigrate
     if (rand_p() < migration_prob) {
       // Emigrants and immigrants need to be allocated contiguously for MPI
@@ -448,7 +453,7 @@ int main(int argc, char *argv[]) {
       size_t parent_a = j;
       // Can't mate with self.
       while (j == parent_a)
-  	parent_a = rand() % pop_size;
+  	    parent_a = rand() % pop_size;
       breed(pops[parent_a], pops[j], coords, n_cities, new_pops[j]);
 
       // Introduce a mutation with probability mutation_p
