@@ -395,6 +395,8 @@ int main(int argc, char *argv[]) {
   size_t offset = id * chunk;
   size_t window = offset + chunk;
 
+  printf("Process %d will solv from %d to %d.\n", id, offset, window);
+
   for (size_t i = offset; i < window; ++i) {
     // Check pops want to emigrate
     if (rand_p() < migration_prob) {
